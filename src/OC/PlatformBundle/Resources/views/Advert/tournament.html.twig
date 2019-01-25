@@ -1,0 +1,59 @@
+{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #} {% extends "OCPlatformBundle::layout.html.twig" %} {% block title %} Lecture d'une annonce - {{ parent() }} {% endblock %} {% block ocplatform_body %} 
+
+
+<p>Affichages des vidéos de tournoi</p>
+
+        {% for defidirect in defidirects %}
+        {% if defidirect.authorpoints > defidirect.userreceivedpoints %}
+        {% set res = "Gagner" %}
+        {% set resn = "Perdu" %}
+        {% else %}
+        {% set res = "Perdu" %}
+        {% set resn = "Gagner" %}
+        {% endif %}
+
+        <div class="row">
+			<div class="col-md-4">
+				<div class="nk-match-score bg-dark-3">
+					Défis terminer
+				</div>
+				<div class="nk-gap-2"></div>
+				<div class="nk-widget-match p-0">
+					<div class="nk-widget-match-teams">
+                        <a href="{{ path('oc_platform_user', {'user': defidirect.author}) }}" class="nk-post-image">
+                            
+                            <div class="nk-widget-match-team-logo">
+                                <img src="{{ path('oc_platform_link') }}../web/images/{{defidirect.author}}avatar.jpg" alt="">
+                            </div>
+                            {{defidirect.author}}
+                            <p>{{res}}</p>
+                        </a>
+                        
+						<div class="nk-widget-match-vs">VS</div>
+                        
+                        
+                        <a href="{{ path('oc_platform_user', {'user': defidirect.userreceived}) }}" class="nk-post-image"> 
+                            <p>{{resn}}</p>
+                            {{defidirect.userreceived}}
+                            {{defidirect.userreceivedpoints}}
+                            <div class="nk-widget-match-team-logo">
+                                <img src="{{ path('oc_platform_link') }}../web/images/{{defidirect.userreceived}}avatar.jpg" alt="">
+                            </div>
+                        </a>
+					</div>
+				</div>
+				<div class="nk-gap-2"></div>
+				<p>{{defidirect.title}}</p>
+			</div>
+			<div class="col-md-8">
+				<div class="responsive-embed responsive-embed-16x9">
+					{{defidirect.content|raw}}
+				</div>
+			</div>
+		</div> 
+        <p></p>
+        <h3 class="nk-decorated-h-2"></h3>
+        
+		{% endfor %}
+
+{% endblock %}

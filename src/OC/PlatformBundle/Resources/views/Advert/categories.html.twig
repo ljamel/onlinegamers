@@ -1,0 +1,27 @@
+{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Lecture d'une annonce - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+<div class="bodysingle">
+    	 
+         {% for advert in adverts %}
+          
+            <a href="{{ path('oc_platform_view', {'slug': advert.slug}) }}">
+              {{ advert.title }}
+            </a>
+            par {{ advert.author }},
+            le {{ advert.date|date('d/m/Y') }}	 
+            <p>{{ advert.content | truncate(150) | raw }}</p>
+            <h3 class="nk-decorated-h-2"></h3>
+        {% else %}    
+          <p>Pas (encore !) d'annonces</p> 
+        {% endfor %}
+    
+    
+</div>
+{% endblock %}

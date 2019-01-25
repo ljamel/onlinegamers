@@ -1,0 +1,339 @@
+{% extends "OCPlatformBundle::layout.html.twig" %} 
+
+{% block title %} 
+    Accueil - {{ parent() }} 
+{% endblock %}
+
+{% block ocplatform_body %}
+
+<style>
+	/* A utiliser pour la bacgkground image */
+	
+	.nk-page-background-top,
+	.nk-page-background-bottom,
+	.nk-page-background-fixed {
+		display: block;
+	}
+
+</style>
+<!-- START: Image Slider -->
+<div class="banner">
+	<div class="title-banner">
+		<h2>{{ index.title }}</h2>
+		<h4>{{ index.content }}</h4>
+        <h6>En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de Cookies ou autres traceurs pour réaliser des statistiques de visites et gérer la connexion après votre inscription <a href="{{ path('oc_platform_mention') }}"> En savoir plus </a></h6>
+	</div>
+</div>
+<!-- END: Image Slider -->
+
+<!-- START: Categories -->
+<div class="nk-gap-2"></div>
+<div class="row vertical-gap user">
+	<div class="col-lg-4">
+		<div class="nk-feature-1">
+			<div class="nk-feature-icon">
+				<img src="{{ path('oc_platform_link') }}../web/images/assets/images/icon-mouse.png" alt="">
+			</div>
+			<div class="nk-feature-cont">
+				<h3 class="nk-feature-title"><a href="{{ path('oc_platform_cat', {'name': 'ordinateur'})  }}">PC</a></h3>
+			</div>
+		</div>
+
+		<table class="table table-hover table-dark">
+
+			<tbody>
+				<tr>
+                    {% for user in userstatcomputer %}
+                    <td  class="statp"><a href="{{ path('oc_platform_user', {'user': user.username|e}) }}">{{user.username|e}}</a> <br />
+                        <span>{{user.points}}<br />Points</span> 
+                    </td>
+                    {% endfor %}
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+	<div class="col-lg-4">
+		<div class="nk-feature-1">
+			<div class="nk-feature-icon">
+				<img src="{{ path('oc_platform_link') }}../web/images/assets/images/icon-gamepad.png" alt="">
+			</div>
+			<div class="nk-feature-cont">
+				<h3 class="nk-feature-title"><a href="{{ path('oc_platform_cat', {'name': 'Playstation'})  }}">PS4</a></h3>
+			</div>
+		</div>
+
+		<table class="table table-hover table-dark">
+			<tbody>
+				<tr>
+                    {% for user in userstat %}
+                    <td  class="statp"><a href="{{ path('oc_platform_user', {'user': user.username}) }}">{{user.username}}</a> <br />
+                        <span>{{user.points}}<br />Points</span> 
+                    </td>
+                    {% endfor %}
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+	<div class="col-lg-4">
+		<div class="nk-feature-1">
+			<div class="nk-feature-icon">
+				<img src="{{ path('oc_platform_link') }}../web/images/assets/images/icon-gamepad-2.png" alt="">
+			</div>
+			<div class="nk-feature-cont">
+				<h3 class="nk-feature-title"><a href="{{ path('oc_platform_cat', {'name': 'Xbox'})  }}">Xbox</a></h3>
+			</div>
+		</div>
+
+		<table class="table table-hover table-dark">
+
+			<tbody>
+				<tr>
+                    {% for user in userstatxbox %}
+                    <td  class="statp"><a href="{{ path('oc_platform_user', {'user': user.username}) }}">{{user.username}}</a> <br />
+                        <span>{{user.points}}<br />Points</span> 
+                    </td>
+                    {% endfor %}
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
+<!-- END: Categories -->
+
+<!-- START: Latest News -->
+<div class="nk-gap-2"></div>
+<h3 class="nk-decorated-h-2"><span>{{ index.title }}</span></h3>
+<div class="nk-gap"></div>
+
+{% for listAdvert in listAdverts|slice(0,3) %}
+    <h2>{{listAdvert.title}}</h2>
+    <p>{{listAdvert.content|raw}}</p>
+{% endfor %}
+
+<!-- message flash -->
+{% if app.session.flashBag.has('info') %}
+<div class="alert alert-info">
+	{% for msg in app.session.flashBag.get('info') %} {{ msg }} {% endfor %}
+</div>
+{% endif %}
+
+
+<div class="nk-gap-2"></div>
+
+<div class="row vertical-gap">
+	<div class="col-lg-8">
+
+		<!-- START: Latest Matches -->
+		<h3 class="nk-decorated-h-2"><span><span class="text-main-1">Dernier</span> Matches</span>
+		</h3>
+		<div class="nk-gap"></div>
+
+        
+        {% for defidirect in defidirects %}
+
+        <div class="row">
+			<div class="col-md-4">
+				<div class="nk-match-score bg-dark-3">
+					En direct
+				</div>
+				<div class="nk-gap-2"></div>
+				<div class="nk-widget-match p-0">
+					<div class="nk-widget-match-teams">
+						<div class="nk-widget-match-team-logo">
+                            <a href="{{ path('oc_platform_user', {'user': defidirect.author}) }}" class="nk-post-image">
+				                <img src="{{ path('oc_platform_link') }}../web/images/{{defidirect.author}}avatar.jpg" alt="">
+                            </a>
+						</div>
+						<div class="nk-widget-match-vs">VS</div>
+						<div class="nk-widget-match-team-logo">
+                            <a href="{{ path('oc_platform_user', {'user': defidirect.userreceived}) }}" class="nk-post-image">
+				                <img src="{{ path('oc_platform_link') }}../web/images/{{defidirect.userreceived}}avatar.jpg" alt="">
+                            </a>
+						</div>
+					</div>
+				</div>
+				<div class="nk-gap-2"></div>
+				<p>Suivez les matches en direct.</p>
+			</div>
+			<div class="col-md-8">
+				<div class="responsive-embed responsive-embed-16x9">
+					{{defidirect.content|raw}}
+				</div>
+			</div>
+		</div>    
+        
+		{% endfor %}	
+		<div class="nk-gap"></div>
+		
+        
+        {% for defi in defis %}
+			
+			<div class="nk-match">
+				<div class="nk-match-team-left">
+					<a href="{{ path('oc_platform_user', {'user': defi.author}) }}">
+						<span class="nk-match-team-logo">
+								<img class="nk-match-team-logo-mini" src="{{ path('oc_platform_link') }}../web/images/{{defi.author}}avatar.jpg" alt="">
+						</span>
+						<span class="nk-match-team-name">
+				            {{defi.author}}
+				        </span>
+					</a>
+				</div>
+				<div class="nk-match-status">
+					<a href="#">
+						<span class="nk-match-status-vs">VS</span>
+						<span class="nk-match-status-date">{{defi.title}}</span>
+						<span class="nk-match-score bg-danger">
+								{{defi.date}}
+							</span>
+					</a>
+				</div>
+				<div class="nk-match-team-right">
+					<a href="{{ path('oc_platform_user', {'user': defi.userreceived}) }}">
+						<span class="nk-match-team-name">
+								{{defi.userreceived}}
+							</span>
+						<span class="nk-match-team-logo">
+								<img class="nk-match-team-logo-mini" src="{{ path('oc_platform_link') }}../web/images/{{defi.userreceived}}avatar.jpg" alt="">
+						</span>
+					</a>
+				</div>
+			</div>
+		{% endfor %}
+		
+		
+		
+		
+
+
+		<!-- END: Latest Matches -->
+
+		<!-- START: Tabbed News  -->
+		<div class="nk-gap-3"></div>
+		<div id="map"></div><p>MAP Monde</p>
+
+
+	</div>
+	<div class="col-lg-4">
+		<!--
+                START: Sidebar
+
+                Additional Classes:
+                    .nk-sidebar-left
+                    .nk-sidebar-right
+                    .nk-sidebar-sticky
+            -->
+		<aside class="nk-sidebar nk-sidebar-right nk-sidebar-sticky  margin-left">
+			<div class="nk-widget">
+				<div class="nk-widget-content">
+
+
+					<form action="{{ path('oc_platform_home') }}/../searchinguser/" method="post" class="nk-form nk-form-style-1" novalidate="novalidate">
+						<div class="input-group">
+							<input type="text" name="find" class="form-control" placeholder="Rechercher un joueur">
+							<button class="nk-btn nk-btn-color-main-1"><span class="ion-search"></span></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+
+
+			<div class="nk-widget nk-widget-highlighted">
+				<h4 class="nk-widget-title"><span><span class="text-main-1"></span>Chat</span>
+				</h4>
+
+                <object data="https://chat.europnet.org/?chatnow=0&origine=3&channel=gamerskingdom" type="text/html" style="width:100%; height:580px;"></objet></object>
+			</div>
+
+			<div class="nk-widget nk-widget-highlighted">
+				<h4 class="nk-widget-title"><span><span class="text-main-1">Top 5</span> Joueurs</span>
+				</h4>
+				<div class="nk-widget-content">
+
+                    {% for user in users|slice(0,5) %}
+                       
+                        <div class="nk-widget-post">
+                            <a href="{{ path('oc_platform_user', {'user': user.username}) }}" class="nk-post-image">
+                                <img src="{{ path('oc_platform_link') }}../web/images/{{user.username}}avatar.jpg" alt="">
+                            </a>
+                            <h3 class="nk-post-title"><a href="{{ path('oc_platform_user', {'user': user.username}) }}">{{user.username}}</a></h3>
+                            <p>{{user.points}} points</p>
+                        </div>
+                    
+                    {% endfor %}
+
+				</div>
+
+				<a href="{{ path('oc_platform_alluser') }}">Tous les joueurs</a>
+			</div>
+
+
+
+
+		</aside>
+		<!-- END: Sidebar -->
+		
+		
+	</div>
+</div>
+
+    <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+      var map, infoWindow;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 10
+        });
+        infoWindow = new google.maps.InfoWindow;
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            map.setCenter(pos);
+              
+            // Position du marker cercle
+            var marker = new google.maps.Marker({
+                
+                position: pos,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 90,
+                    strokeOpacity: 0.2,
+                },
+                draggable: true,
+                map: map
+            });
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+    </script>
+
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGmV-zl2q_1T01QCjt0C1X2ZYve-LEqsA&callback=initMap "></script>
+
+{% endblock %}

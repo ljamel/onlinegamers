@@ -1,0 +1,87 @@
+{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Lecture d'une annonce - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+<!-- message flash -->
+    {% if app.session.flashBag.has('notice') %}
+        <div class="alert alert-info">
+            {% for msg in app.session.flashBag.get('notice') %}
+                {{ msg }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+  <h2>{{ advert.title }}</h2>
+		  {% if advert.image is not null %}
+		    <img class="banner2" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
+		  {% endif %}
+  <div class="well">
+    {{ advert.content|raw }}
+  </div>
+    {% if  teamview.slug is defined %}
+        <a href="{{ path('oc_platform_rejoin', {'link': teamview.slug}) }}" >Rejoindre la team</a>
+    {% endif %}
+  {% if not advert.categories.empty %}
+    <p>
+      Cette annonce est parue dans les catégories suivantes :
+      {% for category in advert.categories %}
+        {{ category.name }}{% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+  {% endif %}
+
+  {% if listAdvertSkills|length > 0 %}
+    <div>
+      Catégories :
+      <ul>
+        {% for advertSkill in listAdvertSkills %}
+          <li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+
+        {% if  app.user != advert.author and advert.team is defined  %}
+            <p>
+                <a href="{{ path('oc_platform_rejoin', {'link': advert.slug}) }}" >
+                Rejoindre la team
+                </a>
+            </p>
+        {% endif %}
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+  <p>
+    <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la liste
+    </a>
+    <a href="{{ path('oc_platform_edit', {'slug': advert.slug}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+      Modifier
+    </a>
+    <a href="{{ path('oc_platform_delete', {'id': advert.id}) }}" class="btn btn-danger">
+      <i class="glyphicon glyphicon-trash"></i>
+      Supprimer
+    </a>
+  </p>
+{% endif %}
+
+{% for comment in comments %}
+
+<p>{{comment.title}}</p>
+<p>{{comment.content}}</p>
+<p>{{comment.author}}</p>
+<a href="{{ path('oc_platform_view', {'slug': comment.title}) }}/{{ comment.id }}"> Répondre </a>
+{% endfor %}
+
+
+
+<h2>Poster un commentaire</h2>
+{{ include("OCPlatformBundle:Advert:form.html.twig") }}
+{% endblock %}
